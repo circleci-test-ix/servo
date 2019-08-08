@@ -19,6 +19,7 @@ jobs:
     docker:
     - image: circleci/python:2.7
     steps: 
+    - checkout
     - run:
         name: before_install
         command: |
@@ -36,6 +37,7 @@ jobs:
     docker:
     - image: circleci/python:2.7
     steps:
+    - checkout
     - run:
         name: before_install
         command: |
