@@ -41,8 +41,11 @@ jobs:
         command: |
           sudo apt-get install software-properties-common
           sudo apt-get update -q
+          echo "ppa:ubuntu"
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          echo "deb -y"
           sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
+          echo "lots of installs"
           sudo apt-get install clang-3.9 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
           pip install virtualenv
           echo "After pip install virutalenv"
