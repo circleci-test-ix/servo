@@ -21,15 +21,12 @@ jobs:
     steps: 
     - checkout
     - run:
-        name: before_install
+        name: script
         command: |
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           sudo apt install python-pip
           pip install virtualenv
           source ~/.profile
-    - run:
-        name: script
-        command: |
           export TERM=xterm
           ./mach test-tidy --no-progress --all
           ./mach test-tidy --no-progress --self-test
@@ -41,29 +38,24 @@ jobs:
     steps:
     - checkout
     - run:
-        name: before_install
+        name: script
         command: |
           sudo apt-get install software-properties-common
           sudo apt-get update -q
-          echo "ppa:ubuntu"
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-          echo "deb -y"
           sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
-          echo "lots of installs"
           sudo apt-get install clang-3.9 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
+          sudo apt-get install libdbus-glib-1-dev
           sudo apt install python-pip
           pip install virtualenv
-          echo "After pip install virutalenv"
           curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-1.16-x86_64-linux-gnu.20190515.tar.gz | tar xz
           sed -i "s;prefix=/opt/gst;prefix=$PWD/gst;g" $PWD/gst/lib/pkgconfig/*.pc
-          echo "Exports"
           export PKG_CONFIG_PATH=$PWD/gst/lib/pkgconfig
           export GST_PLUGIN_SYSTEM_PATH=$PWD/gst/lib/gstreamer-1.0
           export GST_PLUGIN_SCANNER=$PWD/gst/libexec/gstreamer-1.0/gst-plugin-scanner
           export PATH=$PATH:$PWD/gst/bin
           export LD_LIBRARY_PATH=$PWD/gst/lib:$LD_LIBRARY_PATH
           export LLVM_CONFIG=llvm-config-3.9
-          echo "Curl"
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           source ~/.profile
           export $TERM=xterm
