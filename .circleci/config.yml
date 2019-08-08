@@ -57,9 +57,10 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
           sudo apt-get install clang-3.9 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
-          sudo apt-get install libdbus-glib-1-dev
+          sudo apt-get install libdbus-glib-1-dev libedit-dev libglib2.0-dev
           sudo apt-get install python-dbus
           sudo apt install python-pip
+          sudo apt-get install autoconf2.13 cmake gcc-6 g++-6 gperf libomesa6-dev libglu1-mesa-dev libgles2-mesa-dev python-virtualenv xorg-dev
           pip install virtualenv
           curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-1.16-x86_64-linux-gnu.20190515.tar.gz | tar xz
           sed -i "s;prefix=/opt/gst;prefix=$PWD/gst;g" $PWD/gst/lib/pkgconfig/*.pc
