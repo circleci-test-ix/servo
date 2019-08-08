@@ -66,9 +66,6 @@ jobs:
           echo "Curl"
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           source ~/.profile
-    #- run:
-    #    name: script
-    #    command: |
           ./mach bootstrap-gstreamer
           ./mach build -d --verbose -p servo
           ./mach test-unit
