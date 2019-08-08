@@ -4,12 +4,28 @@ workflows:
     version: 2
     no_env:
       jobs:
-      - no_env:
+      - before_install:
           filters:
             branches:
               only:
               - master
-      - env:
+      - script:
+          requires:
+            - before_install
+          filters:
+            branches:
+              only:
+              - master
+    env:
+      jobs:
+      - before_install:
+          filters:
+            branches:
+              only:
+              - master
+      - script:
+          requires:
+            - before_install
           filters:
             branches:
               only:
