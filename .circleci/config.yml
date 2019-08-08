@@ -23,7 +23,6 @@ jobs:
     - run:
         name: before_install
         command: |
-          export TERM=xterm
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           sudo apt install python-pip
           pip install virtualenv
@@ -31,7 +30,7 @@ jobs:
     - run:
         name: script
         command: |
-          echo $TERM
+          export TERM=xterm
           ./mach test-tidy --no-progress --all
           ./mach test-tidy --no-progress --self-test
           python ./etc/memory_reports_over_time.py --test
@@ -67,6 +66,7 @@ jobs:
           echo "Curl"
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           source ~/.profile
+          export $TERM=xterm
           ./mach bootstrap-gstreamer
           ./mach build -d --verbose -p servo
           ./mach test-unit
