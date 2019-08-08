@@ -3,14 +3,14 @@ version: 2.1
 workflows:
     version: 2
     no_env:
-        jobs:
-        - no_env:
+      jobs:
+      - no_env:
           filters:
 	    branches:
 	      only:
 	      - master
-	- env
-	  filters:
+      - env:
+          filters:
 	    branches:
 	      only:
 	      - master
