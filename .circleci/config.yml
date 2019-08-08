@@ -1,64 +1,63 @@
 version: 2.1
 
 workflows:
-	version: 2
-	no_env:
-		jobs:
-		- no_env:
-			filters:
-			  branches:
-			    only:
-				- master
-		- env
-			filters:
-			  branches:
-			    only:
-				- master
-
+    version: 2
+    no_env:
+        jobs:
+        - no_env:
+          filters:
+	    branches:
+	      only:
+	      - master
+	- env
+	  filters:
+	    branches:
+	      only:
+	      - master
 jobs:
   no_env:
-	docker:
-	- image: circleci/python:2.7
-	steps: 
-	- before_install:
-	    name: before_install
-		command: |
-		  curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
-		  pip install virtualenv
-		  source ~/.profile
-	-  script:
-		name: script
-		command: |
-		  ./mach test-tidy --no-progress --all
-		  ./mach test-tidy --no-progress --self-test
-		  python ./etc/memory_reports_over_time.py --test
-		  bash etc/ci/check_no_panic.sh
+    docker:
+    - image: circleci/python:2.7
+    steps: 
+    - before_install:
+        name: before_install
+	command: |
+	  curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
+	  pip install virtualenv
+	  source ~/.profile
+    - script:
+        name: script
+	command: |
+	  ./mach test-tidy --no-progress --all
+	  ./mach test-tidy --no-progress --self-test
+	  python ./etc/memory_reports_over_time.py --test
+	  bash etc/ci/check_no_panic.sh
   env:
     docker:
-	- image: circleci/python:2.7
-	steps:
-	- before_install:
-		name: before_install
-		command: |
-		  sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-		  sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
-		  sudo apt-get update -q
-		  sudo apt-get install clang-3.9 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
-		  pip install virtualenv
-		  curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-1.16-x86_64-linux-gnu.20190515.tar.gz | tar xz
-		  sed -i "s;prefix=/opt/gst;prefix=$PWD/gst;g" $PWD/gst/lib/pkgconfig/*.pc
-		  export PKG_CONFIG_PATH=$PWD/gst/lib/pkgconfig
-		  export GST_PLUGIN_SYSTEM_PATH=$PWD/gst/lib/gstreamer-1.0
-		  export GST_PLUGIN_SCANNER=$PWD/gst/libexec/gstreamer-1.0/gst-plugin-scanner
-		  export PATH=$PATH:$PWD/gst/bin
-		  export LD_LIBRARY_PATH=$PWD/gst/lib:$LD_LIBRARY_PATH
-		  export LLVM_CONFIG=llvm-config-3.9
-		  curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
-		  source ~/.profile
-	- script:
-		name: script
-		command: |
-		  ./mach build -d --verbose -p servo
-		  ./mach test-unit
-		  ./mach clean
-		  bash etc/ci/lockfile_changed.sh
+    - image: circleci/python:2.7
+    steps:
+    - before_install:
+        name: before_install
+	command: |
+	  sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+	  sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
+	  sudo apt-get update -q
+	  sudo apt-get install clang-3.9 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
+	  pip install virtualenv
+	  curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-1.16-x86_64-linux-gnu.20190515.tar.gz | tar xz
+	  sed -i "s;prefix=/opt/gst;prefix=$PWD/gst;g" $PWD/gst/lib/pkgconfig/*.pc
+	  export PKG_CONFIG_PATH=$PWD/gst/lib/pkgconfig
+	  export GST_PLUGIN_SYSTEM_PATH=$PWD/gst/lib/gstreamer-1.0
+	  export GST_PLUGIN_SCANNER=$PWD/gst/libexec/gstreamer-1.0/gst-plugin-scanner
+	  export PATH=$PATH:$PWD/gst/bin
+	  export LD_LIBRARY_PATH=$PWD/gst/lib:$LD_LIBRARY_PATH
+	  export LLVM_CONFIG=llvm-config-3.9
+	  curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
+	  source ~/.profile
+    - script:
+        name: script
+	command: |
+	  ./mach build -d --verbose -p servo
+	  ./mach test-unit
+	  ./mach clean
+	  bash etc/ci/lockfile_changed.sh
