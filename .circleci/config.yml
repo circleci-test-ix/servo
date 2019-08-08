@@ -23,7 +23,7 @@ jobs:
     - run:
         name: before_install
         command: |
-          export TERM=xterm && amiclean
+          export TERM=xterm
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           sudo apt install python-pip
           pip install virtualenv
@@ -66,9 +66,9 @@ jobs:
           echo "Curl"
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           source ~/.profile
-    - run:
-        name: script
-        command: |
+    #- run:
+    #    name: script
+    #    command: |
           ./mach bootstrap-gstreamer
           ./mach build -d --verbose -p servo
           ./mach test-unit
