@@ -60,11 +60,12 @@ jobs:
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           source ~/.profile
           export $TERM=xterm
-          sudo apt-get install build-essential
-          echo "GCC CHECK"
-          which gcc
           ./mach bootstrap-gstreamer
+          echo "Aee"
           ./mach build -d --verbose -p servo
+          echo "Beee"
           ./mach test-unit
+          echo "Ceeee"
           ./mach clean
+          echo "Deeeee"
           bash etc/ci/lockfile_changed.sh
