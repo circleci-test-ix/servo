@@ -17,7 +17,7 @@ workflows:
 jobs:
   no_env:
     docker:
-    - image: circleci/python:2.7
+    - image: circleci/buildpack-deps:xenial
     steps: 
     - checkout
     - run:
@@ -35,7 +35,7 @@ jobs:
           bash etc/ci/check_no_panic.sh
   env:
     docker:
-    - image: circleci/python:2.7
+    - image: circleci/buildpack-deps:xenial
     steps:
     - checkout
     - run:
