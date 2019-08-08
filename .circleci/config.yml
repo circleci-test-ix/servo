@@ -19,11 +19,11 @@ jobs:
     docker:
     - image: circleci/buildpack-deps:xenial
     environment:
-      CC=gcc-6
-      CXX=g++-6
-      CCACHE=/usr/bin/ccache
-      RUSTFLAGS=-Dwarnings
-      CARGO_INCREMENTAL=0
+      CC: gcc-6
+      CXX: g++-6
+      CCACHE: /usr/bin/ccache
+      RUSTFLAGS: -Dwarnings
+      CARGO_INCREMENTAL: 0
     steps: 
     - checkout
     - run:
@@ -42,11 +42,11 @@ jobs:
     docker:
     - image: circleci/buildpack-deps:xenial
     environment:
-      CC=gcc-6
-      CXX=g++-6
-      CCACHE=/usr/bin/ccache
-      RUSTFLAGS=-Dwarnings
-      CARGO_INCREMENTAL=0
+      CC: gcc-6
+      CXX: g++-6
+      CCACHE: /usr/bin/ccache
+      RUSTFLAGS: -Dwarnings
+      CARGO_INCREMENTAL: 0
     steps:
     - checkout
     - run:
