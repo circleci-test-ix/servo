@@ -60,7 +60,7 @@ jobs:
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           source ~/.profile
           export $TERM=xterm
-          apt-get install build-essential
+          sudo apt-get install build-essential
           echo "GCC CHECK"
           which gcc
           ./mach bootstrap-gstreamer
