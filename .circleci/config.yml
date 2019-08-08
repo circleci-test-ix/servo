@@ -19,13 +19,13 @@ jobs:
     docker:
     - image: circleci/python:2.7
     steps: 
-    - before_install:
+    - run:
         name: before_install
         command: |
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           pip install virtualenv
           source ~/.profile
-    - script:
+    - run:
         name: script
         command: |
           ./mach test-tidy --no-progress --all
@@ -36,7 +36,7 @@ jobs:
     docker:
     - image: circleci/python:2.7
     steps:
-    - before_install:
+    - run:
         name: before_install
         command: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -54,7 +54,7 @@ jobs:
           export LLVM_CONFIG=llvm-config-3.9
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
           source ~/.profile
-    - script:
+    - run:
         name: script
         command: |
           ./mach build -d --verbose -p servo
