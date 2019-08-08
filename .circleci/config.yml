@@ -24,6 +24,7 @@ jobs:
         name: before_install
         command: |
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
+          sudo apt install python-pip
           pip install virtualenv
           source ~/.profile
     - run:
@@ -49,6 +50,7 @@ jobs:
           sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
           echo "lots of installs"
           sudo apt-get install clang-3.9 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
+          sudo apt install python-pip
           pip install virtualenv
           echo "After pip install virutalenv"
           curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-1.16-x86_64-linux-gnu.20190515.tar.gz | tar xz
