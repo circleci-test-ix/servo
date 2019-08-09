@@ -25,6 +25,7 @@ jobs:
       CCACHE: /usr/bin/ccache
       RUSTFLAGS: -Dwarnings
       CARGO_INCREMENTAL: 0
+      SHELL: /bin/bash
     steps: 
     - checkout
     - run:
