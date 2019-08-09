@@ -58,7 +58,7 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
           sudo apt-get update -q
-          sudo apt-get install clang-6.0 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
+          sudo apt-get install clang-6.0 llvm-4.0-dev llvm-4.0-runtime libunwind8-dev -y
           sudo apt-get install libdbus-glib-1-dev libedit-dev libglib2.0-dev libc6-dev ccache
           sudo apt-get install python-dbus
           sudo apt install python-pip
