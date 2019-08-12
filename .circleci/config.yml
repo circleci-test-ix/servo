@@ -1,26 +1,15 @@
 version: 2.1
 
-workflows:
-    version: 2    
-    build:
-      jobs:
-      - new
-#       - no_env:
-#           filters:
-#             branches:
-#               only:
-#               - master
-#       - env:
-#           filters:
-#             branches:
-#               only:
-#               - master
-              
-jobs:
+branch_filters: &branch_filters
+  filters:
+    branches:
+      only:
+        - master
 
-  new:
+jobs:
+  no_env:
     machine:
-      image: 
+      image: ubuntu-1604:201903-01
     steps:
       - checkout
       - run:
@@ -33,32 +22,9 @@ jobs:
             python ./etc/memory_reports_over_time.py --test
             bash etc/ci/check_no_panic.sh
 
-  no_env:
-    docker:
-    - image: circleci/buildpack-deps:xenial
-    environment:
-      CC: gcc-6
-      CXX: g++-6
-      CCACHE: /usr/bin/ccache
-      RUSTFLAGS: -Dwarnings
-      CARGO_INCREMENTAL: 0
-    steps: 
-    - checkout
-    - run:
-        name: script
-        command: |
-          curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
-          sudo apt install python-pip
-          pip install virtualenv
-          source ~/.profile
-          export TERM=xterm
-          ./mach test-tidy --no-progress --all
-          ./mach test-tidy --no-progress --self-test
-          python ./etc/memory_reports_over_time.py --test
-          bash etc/ci/check_no_panic.sh
   env:
-    docker:
-    - image: circleci/buildpack-deps:xenial
+    machine:
+      image: ubuntu-1604:201903-01
     environment:
       CC: gcc-6
       CXX: g++-6
@@ -66,40 +32,49 @@ jobs:
       RUSTFLAGS: -Dwarnings
       CARGO_INCREMENTAL: 0
     steps:
-    - checkout
-    - run:
-        name: script
-        command: |
-          sudo apt-get install software-properties-common
-          sudo apt-get update
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-          sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
-          sudo apt-get update -q
-          sudo apt-get install clang-6.0 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
-          sudo apt-get install libdbus-glib-1-dev libedit-dev libglib2.0-dev libc6-dev ccache
-          sudo apt-get install python-dbus
-          sudo apt install python-pip
-          sudo apt-get install autoconf2.13 cmake gcc-6 g++-6 gperf libglu1-mesa-dev libgles2-mesa-dev python-virtualenv xorg-dev
-          pip install virtualenv
-          curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-1.16-x86_64-linux-gnu.20190515.tar.gz | tar xz
-          sed -i "s;prefix=/opt/gst;prefix=$PWD/gst;g" $PWD/gst/lib/pkgconfig/*.pc
-          export PKG_CONFIG_PATH=$PWD/gst/lib/pkgconfig
-          export GST_PLUGIN_SYSTEM_PATH=$PWD/gst/lib/gstreamer-1.0
-          export GST_PLUGIN_SCANNER=$PWD/gst/libexec/gstreamer-1.0/gst-plugin-scanner
-          export PATH=$PATH:$PWD/gst/bin
-          export LD_LIBRARY_PATH=$PWD/gst/lib:$LD_LIBRARY_PATH
-          export LLVM_CONFIG=llvm-config-3.9
-          export SHELL=/bin/bash
-          curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
-          source ~/.profile
-          export $TERM=xterm
-          export RUST_BACKTRACE=1
-          ./mach bootstrap-gstreamer
-          echo "Aee"
-          ./mach build -d --verbose -p servo
-          echo "Beee"
-          ./mach test-unit
-          echo "Ceeee"
-          ./mach clean
-          echo "Deeeee"
-          bash etc/ci/lockfile_changed.sh
+        - checkout
+        - run:
+            name: script
+            command: |
+              sudo apt-get install software-properties-common
+              sudo apt-get update
+              sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+              #sudo add-apt-repository 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' -y
+              sudo apt-get update
+              sudo apt-get install clang-6.0 llvm-3.9-dev llvm-3.9-runtime libunwind8-dev -y
+              sudo apt-get install libdbus-glib-1-dev libedit-dev libglib2.0-dev libc6-dev ccache
+              sudo apt-get install python-dbus
+              sudo apt install python-pip
+              sudo apt-get install autoconf2.13 cmake gcc-6 g++-6 gperf libglu1-mesa-dev libgles2-mesa-dev python-virtualenv xorg-dev
+              pip install virtualenv
+              curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-1.16-x86_64-linux-gnu.20190515.tar.gz | tar xz
+              sed -i "s;prefix=/opt/gst;prefix=$PWD/gst;g" $PWD/gst/lib/pkgconfig/*.pc
+              export PKG_CONFIG_PATH=$PWD/gst/lib/pkgconfig
+              export GST_PLUGIN_SYSTEM_PATH=$PWD/gst/lib/gstreamer-1.0
+              export GST_PLUGIN_SCANNER=$PWD/gst/libexec/gstreamer-1.0/gst-plugin-scanner
+              export PATH=$PATH:$PWD/gst/bin
+              export LD_LIBRARY_PATH=$PWD/gst/lib:$LD_LIBRARY_PATH
+              export LLVM_CONFIG=llvm-config-3.9
+              export SHELL=/bin/bash
+              curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
+              source ~/.profile
+              export $TERM=xterm
+              export RUST_BACKTRACE=1
+              ./mach bootstrap-gstreamer
+              echo "Aee"
+              ./mach build -d --verbose -p servo
+              echo "Beee"
+              ./mach test-unit
+              echo "Ceeee"
+              ./mach clean
+              echo "Deeeee"
+              bash etc/ci/lockfile_changed.sh
+
+workflows:
+    version: 2    
+    build:
+      jobs:
+      - no_env:
+          <<: *branch_filters
+      - env:
+          <<: *branch_filters
