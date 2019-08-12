@@ -15,7 +15,7 @@ jobs:
       - run:
           command: |
             curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
-            pip instlal virtualenv
+            pip install virtualenv
             source ~/.profile
             export TERM=xterm
             ./mach test-tidy --no-progress --all
