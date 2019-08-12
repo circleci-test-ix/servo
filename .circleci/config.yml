@@ -1,21 +1,37 @@
 version: 2.1
 
 workflows:
-    version: 2
+    version: 2    
     build:
       jobs:
-      - no_env:
-          filters:
-            branches:
-              only:
-              - master
-      - env:
-          filters:
-            branches:
-              only:
-              - master
+      - new
+#       - no_env:
+#           filters:
+#             branches:
+#               only:
+#               - master
+#       - env:
+#           filters:
+#             branches:
+#               only:
+#               - master
               
 jobs:
+
+  new:
+    machine:
+      image: 
+    steps:
+      - checkout
+      - run:
+          command: |
+            curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
+            source ~/.profile
+            ./mach test-tidy --no-progress --all
+            ./mach test-tidy --no-progress --self-test
+            python ./etc/memory_reports_over_time.py --test
+            bash etc/ci/check_no_panic.sh
+
   no_env:
     docker:
     - image: circleci/buildpack-deps:xenial
