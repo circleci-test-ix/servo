@@ -8,13 +8,14 @@ branch_filters: &branch_filters
 
 jobs:
   no_env:
-    machine:
-      image: ubuntu-1604:201903-01
+    docker:
+      - image: circleci/buildpack-deps:xenial
     steps:
       - checkout
       - run:
           command: |
             curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
+            sudo apt install python-pip
             source ~/.profile
             export TERM=xterm
             ./mach test-tidy --no-progress --all
