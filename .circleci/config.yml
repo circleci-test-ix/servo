@@ -9,7 +9,7 @@ branch_filters: &branch_filters
 jobs:
   no_env:
     docker:
-      circleci/buildpack-deps:xenial
+      - image: circleci/buildpack-deps:xenial
     steps:
       - checkout
       - run:
