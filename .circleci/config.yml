@@ -39,8 +39,7 @@ jobs:
             name: script
             command: |              
               python --version
-              pip --version
-              alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3
+              pip --version              
               
               sudo apt-get install software-properties-common
               sudo apt-get update
@@ -66,6 +65,7 @@ jobs:
               #export RUST_BACKTRACE=1
               ./mach bootstrap-gstreamer
               echo "Aee"              
+              alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3
               ./mach build -d --verbose -p servo
               echo "Beee"
               ./mach test-unit
