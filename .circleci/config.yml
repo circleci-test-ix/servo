@@ -9,13 +9,14 @@ branch_filters: &branch_filters
 jobs:
   no_env:
     docker:
-      - image: circleci/python
+      circleci/buildpack-deps:xenial
     steps:
       - checkout
       - run:
           command: |
             curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
-            sudo pip install virtualenv
+            sudo apt install python-pip
+            pip install virtualenv
             source ~/.profile
             export TERM=xterm
             ./mach test-tidy --no-progress --all
