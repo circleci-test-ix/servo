@@ -40,6 +40,7 @@ jobs:
             command: |              
               python --version
               pip --version
+              alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3
               
               sudo apt-get install software-properties-common
               sudo apt-get update
