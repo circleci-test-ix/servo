@@ -29,7 +29,7 @@ jobs:
               ls -a /opt/circleci/.pyenv/versions/3.5.2/bin/python3
 
               echo "Aee"
-              alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3
+              echo 'alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3' >> $BASH_ENV
               echo "Bee"
               python3
               echo "Cee"
