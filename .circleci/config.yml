@@ -19,7 +19,7 @@ jobs:
       RUSTFLAGS: -Dwarnings
       CARGO_INCREMENTAL: 0
     steps:
-        - checkout
+#         - checkout
         - run:
             name: script
             command: |              
