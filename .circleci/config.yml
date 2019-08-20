@@ -6,36 +6,7 @@ branch_filters: &branch_filters
       only:
         - master
 
-jobs:
-  debug:
-    machine:
-      image: ubuntu-1604:201903-01
-#     docker:
-#       - image: circleci/python
-    environment:
-      CC: gcc-6
-      CXX: g++-6
-      CCACHE: /usr/bin/ccache
-      RUSTFLAGS: -Dwarnings
-      CARGO_INCREMENTAL: 0
-    steps:
-#         - checkout
-        - run:
-            name: script
-            command: |              
-              python --version
-              pip --version
-              ps              
-              
-              ls -a /opt/circleci/.pyenv/versions/3.5.2/bin/python3
-
-              echo "Aee"
-              alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3
-              shopt -s expand_aliases
-              echo "Bee"
-              python3
-              echo "Cee"
-  
+jobs:  
   no_env:
     docker:
       - image: circleci/buildpack-deps:xenial
@@ -56,8 +27,6 @@ jobs:
   env:
     machine:
       image: ubuntu-1604:201903-01
-#     docker:
-#       - image: circleci/python
     environment:
       CC: gcc-6
       CXX: g++-6
@@ -66,9 +35,11 @@ jobs:
       CARGO_INCREMENTAL: 0
     steps:
         - checkout
+        - restore_cache:
+            keys: dependencies
         - run:
-            name: script
-            command: |              
+            name: Install Dependencies
+            command: |
               python --version
               pip --version              
               
@@ -80,6 +51,9 @@ jobs:
               
               sudo apt-get install autoconf2.13 cmake g++-6 gperf libosmesa6-dev libgles2-mesa-dev libglu1-mesa-dev python-virtualenv xorg-dev ccache libdbus-glib-1-dev libedit-dev libglib2.0-dev -y
               sudo apt-get install clang-3.9 llvm-3.9 llvm-3.9-runtime libunwind-dev -y
+        - run:
+            name: script
+            command: |              
               curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-x86_64-linux-gnu.tar.gz | tar xz
               sed -i "s;prefix=/root/gstreamer;prefix=$PWD/gstreamer;g" $PWD/gstreamer/lib/x86_64-linux-gnu/pkgconfig/*.pc
               
@@ -92,24 +66,35 @@ jobs:
               
               curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
               source ~/.profile
-              export $TERM=xterm
-              #export RUST_BACKTRACE=1
+              export $TERM=xterm              
               ./mach bootstrap-gstreamer
-              echo "Aee"
+              
+              # ensure python3 is available in the path
               export PATH=/opt/circleci/.pyenv/versions/3.5.2/bin:$PATH
               ./mach build -d --verbose -p servo
-              echo "Beee"
               ./mach test-unit
-              echo "Ceeee"
               ./mach clean
-              echo "Deeeee"
               bash etc/ci/lockfile_changed.sh
+        - run:
+            name: Before Cache
+            command: |
+              ./mach clean-nightlies --keep 2 --force
+              ./mach clean-cargo-cache --keep 2 --force
+              rm -rf $HOME/.cargo/registry
+              rm -rf $HOME/.servo/target
+        - save_cache:
+            key: dependencies
+            paths:
+              - .servo
+              - ~/.cargo
+              - ~/.rustup
+              - ~/.ccache
 
 workflows:
     version: 2    
     build:
       jobs:
-      - no_env:
-          <<: *branch_filters
-      - env:
-          <<: *branch_filters
+        - no_env:
+            <<: *branch_filters
+        - env:
+            <<: *branch_filters
