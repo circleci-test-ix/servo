@@ -31,7 +31,7 @@ jobs:
 
               echo "Aee"
               alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3
-              alias
+              shopt -s expand_aliases
               echo "Bee"
               python3
               echo "Cee"
