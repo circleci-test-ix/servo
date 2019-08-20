@@ -7,6 +7,31 @@ branch_filters: &branch_filters
         - master
 
 jobs:
+  debug:
+    machine:
+      image: ubuntu-1604:201903-01
+#     docker:
+#       - image: circleci/python
+    environment:
+      CC: gcc-6
+      CXX: g++-6
+      CCACHE: /usr/bin/ccache
+      RUSTFLAGS: -Dwarnings
+      CARGO_INCREMENTAL: 0
+    steps:
+        - checkout
+        - run:
+            name: script
+            command: |              
+              python --version
+              pip --version
+
+              echo "Aee"
+              alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3
+              echo "Bee"
+              python3
+              echo "Cee"
+  
   no_env:
     docker:
       - image: circleci/buildpack-deps:xenial
@@ -81,7 +106,8 @@ workflows:
     version: 2    
     build:
       jobs:
-      - no_env:
-          <<: *branch_filters
-      - env:
-          <<: *branch_filters
+      - debug
+#       - no_env:
+#           <<: *branch_filters
+#       - env:
+#           <<: *branch_filters
