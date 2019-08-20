@@ -97,7 +97,7 @@ jobs:
               ./mach bootstrap-gstreamer
               echo "Aee"              
               alias python3=/opt/circleci/.pyenv/versions/3.5.2/bin/python3 >> $BASH_ENV
-              python3
+              shopt -s expand_aliases
               ./mach build -d --verbose -p servo
               echo "Beee"
               ./mach test-unit
@@ -111,7 +111,7 @@ workflows:
     build:
       jobs:
       - debug
-#       - no_env:
-#           <<: *branch_filters
-#       - env:
-#           <<: *branch_filters
+      - no_env:
+          <<: *branch_filters
+      - env:
+          <<: *branch_filters
