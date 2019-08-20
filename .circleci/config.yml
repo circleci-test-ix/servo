@@ -78,7 +78,7 @@ jobs:
               sudo add-apt-repository 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise-3.9 main' -y
               sudo apt-get update -q
               
-              sudo apt-get install autoconf2.13 cmake g++-6 gperf libosmesa6-dev libgles2-mesa-dev python-virtualenv xorg-dev ccache libdbus-glib-1-dev libedit-dev libglib2.0-dev -y
+              sudo apt-get install autoconf2.13 cmake g++-6 gperf libosmesa6-dev libgles2-mesa-dev libglu1-mesa-dev python-virtualenv xorg-dev ccache libdbus-glib-1-dev libedit-dev libglib2.0-dev -y
               sudo apt-get install clang-3.9 llvm-3.9 llvm-3.9-runtime libunwind-dev -y
               curl -L https://servo-deps.s3.amazonaws.com/gstreamer/gstreamer-x86_64-linux-gnu.tar.gz | tar xz
               sed -i "s;prefix=/root/gstreamer;prefix=$PWD/gstreamer;g" $PWD/gstreamer/lib/x86_64-linux-gnu/pkgconfig/*.pc
