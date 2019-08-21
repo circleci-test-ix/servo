@@ -75,13 +75,18 @@ jobs:
               ./mach test-unit
               ./mach clean
               bash etc/ci/lockfile_changed.sh
-        - run:
-            name: Before Cache
-            command: |
+              
               ./mach clean-nightlies --keep 2 --force
               ./mach clean-cargo-cache --keep 2 --force
               rm -rf $HOME/.cargo/registry
               rm -rf $HOME/.servo/target
+#         - run:
+#             name: Before Cache
+#             command: |
+#               ./mach clean-nightlies --keep 2 --force
+#               ./mach clean-cargo-cache --keep 2 --force
+#               rm -rf $HOME/.cargo/registry
+#               rm -rf $HOME/.servo/target
         - save_cache:
             key: dependencies
             paths:
